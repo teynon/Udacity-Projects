@@ -5,254 +5,256 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Udacity Portfolio"
-        android:id="@+id/txtPortfolioTitle"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="32sp" />
-
-    <TableLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/txtPortfolioTitle"
-        android:layout_marginTop="10dp">
-
-        <TableRow
+        android:layout_height="match_parent">
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnSpotify"
-                android:layout_column="0"
-                android:layout_weight="0.5"
-                android:layout_marginTop="10dp">
-                <ImageView
-                    android:layout_centerInParent="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btnImgSpotify"
-                    android:layout_column="0"
-                    android:layout_weight="0.5"
-                    android:src="@mipmap/spotifystreamer"
-                    android:layout_gravity="center"
-                    android:onClick="click_SpotifyStreamer"/>
+                android:text="@string/mainHeader"
+                android:id="@+id/txtPortfolioTitle"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/mainHeaderFontSize" />
 
-                <TextView
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtPortfolioTitle"
+                android:layout_marginTop="@dimen/mainTableTopMargin">
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:textAlignment="center"
-                    android:layout_alignBottom="@+id/btnImgSpotify"
-                    android:layout_alignLeft="@+id/btnImgSpotify"
-                    android:layout_alignRight="@+id/btnImgSpotify"
-                    android:text="Spotify Streamer"
-                    android:gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="15sp"
-                    android:textColor="#FFFFFF"/>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnSpotify"
+                        android:layout_column="0"
+                        android:layout_weight="@dimen/mainColumnWeight"
+                        android:layout_marginTop="@dimen/mainCellTopMargin">
+                        <ImageView
+                            android:layout_centerInParent="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btnImgSpotify"
+                            android:layout_column="0"
+                            android:src="@mipmap/spotifystreamer"
+                            android:layout_gravity="center"
+                            android:onClick="click_SpotifyStreamer"/>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnScores"
-                android:layout_column="0"
-                android:layout_weight="0.5"
-                android:layout_marginTop="10dp">
-                <ImageView
-                    android:layout_centerInParent="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btnImgScores"
-                    android:layout_column="0"
-                    android:layout_weight="0.5"
-                    android:src="@mipmap/blank"
-                    android:onClick="click_ScoresApp"/>
+                        <TextView
 
-                <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textAlignment="center"
+                            android:layout_alignBottom="@+id/btnImgSpotify"
+                            android:layout_alignLeft="@+id/btnImgSpotify"
+                            android:layout_alignRight="@+id/btnImgSpotify"
+                            android:text="@string/buttonSpotify"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/iconTextBottomMargin"
+                            android:textSize="@dimen/iconTextSize"
+                            android:textColor="#FFFFFF"/>
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:textAlignment="center"
-                    android:layout_alignBottom="@+id/btnImgScores"
-                    android:layout_alignLeft="@+id/btnImgScores"
-                    android:layout_alignRight="@+id/btnImgScores"
-                    android:text="Scores App"
-                    android:gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="15sp"
-                    android:textColor="#FFFFFF"/>
+                    </RelativeLayout>
 
-                <!-- ICON TO BE DETERMINED -->
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnScores"
+                        android:layout_column="0"
+                        android:layout_weight="@dimen/mainColumnWeight"
+                        android:layout_marginTop="@dimen/mainCellTopMargin">
+                        <ImageView
+                            android:layout_centerInParent="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btnImgScores"
+                            android:layout_column="0"
+                            android:src="@mipmap/blank"
+                            android:onClick="click_ScoresApp"/>
 
-            </RelativeLayout>
-        </TableRow>
+                        <TextView
 
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textAlignment="center"
+                            android:layout_alignBottom="@+id/btnImgScores"
+                            android:layout_alignLeft="@+id/btnImgScores"
+                            android:layout_alignRight="@+id/btnImgScores"
+                            android:text="@string/buttonScores"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/iconTextBottomMargin"
+                            android:textSize="@dimen/iconTextSize"
+                            android:textColor="#FFFFFF"/>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                        <!-- ICON TO BE DETERMINED -->
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnLibrary"
-                android:layout_column="0"
-                android:layout_weight="0.5"
-                android:layout_marginTop="10dp">
-                <ImageView
-                    android:layout_centerInParent="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btnImgLibrary"
-                    android:layout_column="0"
-                    android:layout_weight="0.5"
-                    android:src="@mipmap/blank"
-                    android:onClick="click_Library"/>
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:textAlignment="center"
-                    android:layout_alignBottom="@+id/btnImgLibrary"
-                    android:layout_alignLeft="@+id/btnImgLibrary"
-                    android:layout_alignRight="@+id/btnImgLibrary"
-                    android:text="Library App"
-                    android:gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="15sp"
-                    android:textColor="#FFFFFF"/>
-
-                <!-- ICON TO BE DETERMINED -->
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnBuildItBigger"
-                android:layout_column="0"
-                android:layout_weight="0.5"
-                android:layout_marginTop="10dp">
-                <ImageView
-                    android:layout_centerInParent="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btnImgBuildItBigger"
-                    android:layout_column="0"
-                    android:layout_weight="0.5"
-                    android:src="@mipmap/blank"
-                    android:onClick="click_BuildItBigger"/>
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:textAlignment="center"
-                    android:layout_alignBottom="@+id/btnImgBuildItBigger"
-                    android:layout_alignLeft="@+id/btnImgBuildItBigger"
-                    android:layout_alignRight="@+id/btnImgBuildItBigger"
-                    android:text="Build It Bigger"
-                    android:gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="15sp"
-                    android:textColor="#FFFFFF"/>
-
-                <!-- ICON TO BE DETERMINED -->
-
-            </RelativeLayout>
-        </TableRow>
+                    </RelativeLayout>
+                </TableRow>
 
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnXYZReader"
-                android:layout_column="0"
-                android:layout_weight="0.5"
-                android:layout_marginTop="10dp">
-                <ImageView
-                    android:layout_centerInParent="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btnImgXYZReader"
-                    android:layout_column="0"
-                    android:layout_weight="0.5"
-                    android:src="@mipmap/blank"
-                    android:onClick="click_XYZReader"/>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnLibrary"
+                        android:layout_column="0"
+                        android:layout_weight="@dimen/mainColumnWeight"
+                        android:layout_marginTop="@dimen/mainCellTopMargin">
+                        <ImageView
+                            android:layout_centerInParent="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btnImgLibrary"
+                            android:layout_column="0"
+                            android:src="@mipmap/blank"
+                            android:onClick="click_Library"/>
 
-                <TextView
+                        <TextView
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:textAlignment="center"
-                    android:layout_alignBottom="@+id/btnImgXYZReader"
-                    android:layout_alignLeft="@+id/btnImgXYZReader"
-                    android:layout_alignRight="@+id/btnImgXYZReader"
-                    android:text="XYZ Reader"
-                    android:gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="15sp"
-                    android:textColor="#FFFFFF"/>
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textAlignment="center"
+                            android:layout_alignBottom="@+id/btnImgLibrary"
+                            android:layout_alignLeft="@+id/btnImgLibrary"
+                            android:layout_alignRight="@+id/btnImgLibrary"
+                            android:text="@string/buttonLibrary"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/iconTextBottomMargin"
+                            android:textSize="@dimen/iconTextSize"
+                            android:textColor="#FFFFFF"/>
 
-                <!-- ICON TO BE DETERMINED -->
+                        <!-- ICON TO BE DETERMINED -->
 
-            </RelativeLayout>
+                    </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnCapstone"
-                android:layout_column="0"
-                android:layout_weight="0.5"
-                android:layout_marginTop="10dp">
-                <ImageView
-                    android:layout_centerInParent="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btnImgCapstone"
-                    android:layout_column="0"
-                    android:layout_weight="0.5"
-                    android:src="@mipmap/capstone_blank"
-                    android:onClick="click_Capstone"/>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnBuildItBigger"
+                        android:layout_column="0"
+                        android:layout_weight="@dimen/mainColumnWeight"
+                        android:layout_marginTop="@dimen/mainCellTopMargin">
+                        <ImageView
+                            android:layout_centerInParent="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btnImgBuildItBigger"
+                            android:layout_column="0"
+                            android:src="@mipmap/blank"
+                            android:onClick="click_BuildItBigger"/>
 
-                <TextView
+                        <TextView
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:textAlignment="center"
-                    android:layout_alignBottom="@+id/btnImgCapstone"
-                    android:layout_alignLeft="@+id/btnImgCapstone"
-                    android:layout_alignRight="@+id/btnImgCapstone"
-                    android:text="Capstone"
-                    android:gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="15sp"
-                    android:textColor="#FFFFFF"/>
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textAlignment="center"
+                            android:layout_alignBottom="@+id/btnImgBuildItBigger"
+                            android:layout_alignLeft="@+id/btnImgBuildItBigger"
+                            android:layout_alignRight="@+id/btnImgBuildItBigger"
+                            android:text="@string/buttonBuildItBigger"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/iconTextBottomMargin"
+                            android:textSize="@dimen/iconTextSize"
+                            android:textColor="#FFFFFF"/>
 
-                <!-- ICON TO BE DETERMINED -->
+                        <!-- ICON TO BE DETERMINED -->
 
-            </RelativeLayout>
-        </TableRow>
-    </TableLayout>
+                    </RelativeLayout>
+                </TableRow>
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnXYZReader"
+                        android:layout_column="0"
+                        android:layout_weight="@dimen/mainColumnWeight"
+                        android:layout_marginTop="@dimen/mainCellTopMargin">
+                        <ImageView
+                            android:layout_centerInParent="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btnImgXYZReader"
+                            android:layout_column="0"
+                            android:src="@mipmap/blank"
+                            android:onClick="click_XYZReader"/>
+
+                        <TextView
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textAlignment="center"
+                            android:layout_alignBottom="@+id/btnImgXYZReader"
+                            android:layout_alignLeft="@+id/btnImgXYZReader"
+                            android:layout_alignRight="@+id/btnImgXYZReader"
+                            android:text="@string/buttonXYZReader"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/iconTextBottomMargin"
+                            android:textSize="@dimen/iconTextSize"
+                            android:textColor="#FFFFFF"/>
+
+                        <!-- ICON TO BE DETERMINED -->
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnCapstone"
+                        android:layout_column="0"
+                        android:layout_weight="@dimen/mainColumnWeight"
+                        android:layout_marginTop="@dimen/mainCellTopMargin">
+                        <ImageView
+                            android:layout_centerInParent="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btnImgCapstone"
+                            android:layout_column="0"
+                            android:src="@mipmap/capstone_blank"
+                            android:onClick="click_Capstone"/>
+
+                        <TextView
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textAlignment="center"
+                            android:layout_alignBottom="@+id/btnImgCapstone"
+                            android:layout_alignLeft="@+id/btnImgCapstone"
+                            android:layout_alignRight="@+id/btnImgCapstone"
+                            android:text="@string/buttonCapstone"
+                            android:gravity="center"
+                            android:layout_marginBottom="@dimen/iconTextBottomMargin"
+                            android:textSize="@dimen/iconTextSize"
+                            android:textColor="#FFFFFF"/>
+
+                        <!-- ICON TO BE DETERMINED -->
+
+                    </RelativeLayout>
+                </TableRow>
+            </TableLayout>
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>

@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">teynon\'s Portfolio</string>
     <string name="action_settings">Settings</string>
+
+    <string name="mainHeader">Udacity Portfolio</string>
+
+    <string name="buttonSpotify">Spotify Streamer</string>
+    <string name="buttonScores">Scores App</string>
+    <string name="buttonLibrary">Library App</string>
+    <string name="buttonBuildItBigger">Build It Bigger</string>
+    <string name="buttonXYZReader">XYZ Reader</string>
+    <string name="buttonCapstone">Capstone</string>
+
+    <string name="toastSpotify">This will launch the Spotify Streamer app.</string>
+    <string name="toastScores">This will launch the Scores app.</string>
+    <string name="toastLibrary">This will launch the Library app.</string>
+    <string name="toastBuildItBigger">This will launch the Build It Bigger app.</string>
+    <string name="toastXYZReader">This will launch the XYZ Reader app.</string>
+    <string name="toastCapstone">This will launch the Capstone app.</string>
 </resources>
