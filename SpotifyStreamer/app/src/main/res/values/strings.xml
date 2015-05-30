@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Spotify Streamer</string>
+
+    <!-- Artist Search Screen -->
+    <string name="searchPlaceholder">Search Artist</string>
+    <string name="artistResultPlaceholder">(Missing artist name)</string>
+
+    <string name="msgNoResults">No artists found.</string>
+
+    <string name="action_settings">Settings</string>
+</resources>

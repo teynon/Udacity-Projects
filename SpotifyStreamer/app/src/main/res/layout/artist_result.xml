@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/layoutArtistResult">
+
+    <ImageView
+        android:maxWidth="@dimen/artistResultIconMaxWidth"
+        android:maxHeight="@dimen/artistResultIconMaxHeight"
+        android:minWidth="@dimen/artistResultIconMinWidth"
+        android:layout_width="@dimen/artistResultIconMaxWidth"
+        android:layout_height="@dimen/artistResultIconMaxHeight"
+        android:id="@+id/imgArtistIcon"
+        android:layout_margin="@dimen/artistResultIconMargin"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/artistResultPlaceholder"
+        android:layout_marginTop="@dimen/artistResultTextMarginTop"
+        android:textSize="@dimen/artistResultTextSize"
+        android:id="@+id/txtArtistName" />
+</LinearLayout>
