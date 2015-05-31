@@ -1,27 +1,31 @@
 package com.tomsfreelance.spotifystreamer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.tomsfreelance.spotifystreamer.Adapters.ArtistResultAdapter;
+import com.tomsfreelance.spotifystreamer.Tasks.SearchArtistsTask;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import kaaes.spotify.webapi.android.SpotifyApi;
-import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private EditText txtArtistSearch = null;
     private Context ctx = this;
@@ -56,6 +60,8 @@ public class MainActivity extends ActionBarActivity {
             setArtistResults(results.artists.items);
         }
         else {
+            setArtistResults(new ArrayList<Artist>());
+
             if (quickNotice != null) quickNotice.cancel();
 
             quickNotice = Toast.makeText(ctx, R.string.msgNoResults, Toast.LENGTH_SHORT);
@@ -122,6 +128,20 @@ public class MainActivity extends ActionBarActivity {
 
                 // Send a new delayed search request.
                 typingDelayHandler.postDelayed(typingDelayRunnable, getResources().getInteger(R.integer.searchTypingDelay));
+            }
+        });
+
+        artistResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ArtistResultAdapter adapter = (ArtistResultAdapter)artistResults.getAdapter();
+
+                // Load intent for selected artist.
+                Intent topSongsIntent = new Intent(ctx, ArtistHitsActivity.class);
+
+                topSongsIntent.putExtra(getString(R.string.intentMsgArtistName), adapter.getItem(position).name);
+                topSongsIntent.putExtra(getString(R.string.intentMsgArtistID), adapter.getItem(position).id);
+                startActivity(topSongsIntent);
             }
         });
     }

@@ -1,4 +1,4 @@
-package com.tomsfreelance.spotifystreamer;
+package com.tomsfreelance.spotifystreamer.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.tomsfreelance.spotifystreamer.R;
 
 import java.util.List;
 

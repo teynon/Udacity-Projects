@@ -1,6 +1,8 @@
-package com.tomsfreelance.spotifystreamer;
+package com.tomsfreelance.spotifystreamer.Tasks;
 
 import android.os.AsyncTask;
+
+import com.tomsfreelance.spotifystreamer.MainActivity;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;

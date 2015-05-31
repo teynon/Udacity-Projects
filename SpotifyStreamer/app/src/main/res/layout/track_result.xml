@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:maxWidth="@dimen/trackResultIconMaxWidth"
+        android:maxHeight="@dimen/trackResultIconMaxHeight"
+        android:minWidth="@dimen/trackResultIconMinWidth"
+        android:layout_width="@dimen/trackResultIconMaxWidth"
+        android:layout_height="@dimen/trackResultIconMaxHeight"
+        android:id="@+id/imgAlbumIcon"
+        android:layout_margin="@dimen/trackResultIconMargin"/>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/trackNameResultPlaceholder"
+            android:layout_marginTop="@dimen/trackResultTextMarginTop"
+            android:textSize="@dimen/trackResultTextSize"
+            android:id="@+id/txtSongName" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/trackAlbumResultPlaceholder"
+            android:textSize="@dimen/trackResultTextSize"
+            android:layout_below="@+id/txtSongName"
+            android:id="@+id/txtSongAlbum" />
+    </RelativeLayout>
+
+</LinearLayout>

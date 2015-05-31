@@ -14,4 +14,14 @@
     <dimen name="artistResultTextSize">20sp</dimen>
     <dimen name="artistResultTextMarginTop">36dp</dimen>
 
+    <!-- Track Result Layout -->
+
+    <dimen name="trackResultIconMaxHeight">80dp</dimen>
+    <dimen name="trackResultIconMaxWidth">80dp</dimen>
+    <dimen name="trackResultIconMinWidth">80dp</dimen>
+    <dimen name="trackResultIconMargin">10dp</dimen>
+
+    <dimen name="trackResultTextSize">20sp</dimen>
+    <dimen name="trackResultTextMarginTop">23dp</dimen>
+
 </resources>
