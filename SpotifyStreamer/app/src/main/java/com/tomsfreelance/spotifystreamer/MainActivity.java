@@ -25,6 +25,16 @@ import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
 
 
+/**
+ * NOTE: When I upgraded to Windows 8, it set my "local account" to "gabriella"
+ * for some dumb reason. I just realized that it is now saying Created by gabriella
+ * all over the place...
+ * (http://www.eightforums.com/tutorials/8782-user-account-name-change-windows-8-a.html)
+ * - per the link above: I don't want to delete my account and risk losing files.
+ *   I updated the template to use a hardcoded "teynon" instead of ${user}
+ *
+ * Created by teynon on 5/30/2015.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private EditText txtArtistSearch = null;

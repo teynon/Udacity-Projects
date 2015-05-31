@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.tomsfreelance.spotifystreamer.R;
+import com.tomsfreelance.spotifystreamer.model.PlaybackTrack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kaaes.spotify.webapi.android.models.Artist;
@@ -19,14 +21,18 @@ import kaaes.spotify.webapi.android.models.Track;
 /**
  * Created by gabriella on 5/30/2015.
  */
-public class TrackResultAdapter extends ArrayAdapter<Track> {
+public class TrackResultAdapter extends ArrayAdapter<PlaybackTrack> {
     private Context ctx = null;
-    private List<Track> Tracks = null;
+    private ArrayList<PlaybackTrack> Tracks = null;
 
-    public TrackResultAdapter(Context context, List<Track> tracks) {
+    public TrackResultAdapter(Context context, ArrayList<PlaybackTrack> tracks) {
         super(context, R.layout.track_result, tracks);
         ctx = context;
         Tracks = tracks;
+    }
+
+    public ArrayList<PlaybackTrack> GetTracks() {
+        return Tracks;
     }
 
     // Used http://stackoverflow.com/questions/11927967/dynamically-populate-the-linear-layout-depending-upon-markers-on-the-map
@@ -51,16 +57,16 @@ public class TrackResultAdapter extends ArrayAdapter<Track> {
         }
 
         if (holder != null) {
-            Track track = Tracks.get(position);
-            holder.txtSongName.setText(track.name);
+            PlaybackTrack track = Tracks.get(position);
+            holder.txtSongName.setText(track.SongName);
 
-            if (track.album != null) {
-                holder.txtAlbumName.setText(track.album.name);
+            if (track.AlbumName != null) {
+                holder.txtAlbumName.setText(track.AlbumName);
+            }
 
-                if (track.album.images.size() > 0) {
-                    // Get the smallest one.
-                    Picasso.with(ctx).load(track.album.images.get(track.album.images.size() - 1).url).into(holder.imgAlbum);
-                }
+            if (track.AlbumImageSmall != "") {
+                // Get the smallest one.
+                Picasso.with(ctx).load(track.AlbumImageSmall).into(holder.imgAlbum);
             }
         }
 

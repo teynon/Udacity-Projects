@@ -1,14 +1,18 @@
 <resources>
     <string name="app_name">Spotify Streamer</string>
 
+    <!-- Intent Messages -->
+    <string name="intentMsgArtistName">com.tomsfreelance.spotifystreamer.ArtistName</string>
+    <string name="intentMsgArtistID">com.tomsfreelance.spotifystreamer.ArtistID</string>
+    <string name="intentMsgTrack">com.tomsfreelance.spotifystreamer.Track</string>
+    <string name="intentMsgTrackList">com.tomsfreelance.spotifystreamer.TrackList</string>
+
     <!-- Artist Search Screen -->
     <string name="searchPlaceholder">Search Artist</string>
     <string name="artistResultPlaceholder">(Missing artist name)</string>
 
     <string name="msgNoResults">No artists found.</string>
 
-    <string name="intentMsgArtistName">com.tomsfreelance.spotifystreamer.ArtistName</string>
-    <string name="intentMsgArtistID">com.tomsfreelance.spotifystreamer.ArtistID</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_artist_hits">Top 10 Tracks</string>
@@ -17,4 +21,11 @@
     <string name="trackNameResultPlaceholder">(Missing song name)</string>
     <string name="trackAlbumResultPlaceholder">(Missing album name)</string>
     <string name="topTracksCountryCode">us</string>
+
+    <!-- Playback Screen -->
+    <string name="title_activity_playback">Spotify Streamer</string>
+    <string name="playbackArtistPlaceholder">(Artist Name)</string>
+    <string name="playbackAlbumPlaceholder">(Album Name)</string>
+    <string name="playerSeekbarCurrentPlaceholder">0:00</string>
+    <string name="playerSeekbarRemainingPlaceholder">0:30</string>
 </resources>

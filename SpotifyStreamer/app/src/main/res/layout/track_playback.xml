@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/playbackScreen">
+
+    <!-- This will probably be a "MediaController", but I still need to learn about that,
+    and it appears that the Player portion is suppose to be part of Stage 2 of the project.
+    This is somewhat unclear, however. -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/playerHeaderHeight"
+        android:id="@+id/layoutPlayerHeader">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/playerHeaderTitleHeight"
+            android:text="@string/playbackArtistPlaceholder"
+            android:textAlignment="center"
+            android:layout_marginTop="@dimen/playerArtistMarginTop"
+            android:id="@+id/txtPlaybackArtistName"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/playerHeaderTitleHeight"
+            android:text="@string/playbackAlbumPlaceholder"
+            android:textAlignment="center"
+            android:id="@+id/txtPlaybackAlbumName"
+            android:layout_below="@+id/txtPlaybackArtistName"
+            android:gravity="center"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/playerAlbumMargin"
+            android:id="@+id/imgPlaybackAlbum"/>
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/playerFooterHeight"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/layoutPlayerFooter"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/playerHeaderTitleHeight"
+            android:text="@string/playbackAlbumPlaceholder"
+            android:textAlignment="center"
+            android:id="@+id/playbackSongName"
+            android:gravity="center"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/playerSeekbarHeight"
+                android:layout_marginLeft="@dimen/playerSeekbarMargin"
+                android:layout_marginRight="@dimen/playerSeekbarMargin"
+                android:id="@+id/playbackSeekbar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/playerSeekbarCurrentTimeHeight"
+                android:text="@string/playerSeekbarCurrentPlaceholder"
+                android:layout_below="@+id/playbackSeekbar"
+                android:layout_marginLeft="@dimen/playerCurrentTimeMarginLeft"
+                android:id="@+id/txtSeekbarCurrent"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/playerSeekbarCurrentTimeHeight"
+                android:text="@string/playerSeekbarRemainingPlaceholder"
+                android:layout_below="@+id/playbackSeekbar"
+                android:layout_alignRight="@+id/playbackSeekbar"
+                android:id="@+id/txtSeekbarRemaining"
+                />
+        </RelativeLayout>
+
+        <MediaController
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/txtSeekbarCurrent"
+            android:layout_weight="1"
+            android:id="@+id/playbackMediaController"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/playerBtnSize"
+                android:layout_height="@dimen/playerBtnSize"
+                android:src="@mipmap/btnprev"
+                android:layout_marginLeft="@dimen/playerBtnMargin"
+                android:id="@+id/btnPrev"/>
+
+            <ImageView
+                android:layout_width="@dimen/playerBtnSize"
+                android:layout_height="@dimen/playerBtnSize"
+                android:src="@mipmap/btnplay"
+                android:layout_gravity="top|center"
+                android:id="@+id/btnPlay"
+                />
+
+            <ImageView
+                android:layout_width="@dimen/playerBtnSize"
+                android:layout_height="@dimen/playerBtnSize"
+                android:src="@mipmap/btnnext"
+                android:layout_marginRight="@dimen/playerBtnMargin"
+                android:layout_gravity="right"
+                android:id="@+id/btnNext"/>
+
+        </MediaController>
+    </LinearLayout>
+
+</LinearLayout>
