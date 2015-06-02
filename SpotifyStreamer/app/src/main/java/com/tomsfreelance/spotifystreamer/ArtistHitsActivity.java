@@ -12,13 +12,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.tomsfreelance.spotifystreamer.Adapters.ArtistResultAdapter;
 import com.tomsfreelance.spotifystreamer.Adapters.TrackResultAdapter;
 import com.tomsfreelance.spotifystreamer.Tasks.TopTracksForArtistTask;
 import com.tomsfreelance.spotifystreamer.model.PlaybackTrack;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.Tracks;
@@ -40,7 +38,7 @@ public class ArtistHitsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_artist_hits);
+        setContentView(R.layout.artist_hits);
         Initialize();
     }
 
@@ -58,8 +56,8 @@ public class ArtistHitsActivity extends AppCompatActivity {
         }
 
         // Get the tracks.
-        TopTracksForArtistTask trackTask = new TopTracksForArtistTask(this, getString(R.string.topTracksCountryCode));
-        trackTask.execute(ArtistID);
+        //TopTracksForArtistTask trackTask = new TopTracksForArtistTask(this, getString(R.string.topTracksCountryCode));
+        //trackTask.execute(ArtistID);
 
         InitializeListeners();
     }
@@ -116,21 +114,6 @@ public class ArtistHitsActivity extends AppCompatActivity {
         super.onRestoreInstanceState(inState);
 
         ArrayList<PlaybackTrack> tracks = inState.getParcelableArrayList("TrackList");
-        setArtistTracks(tracks);
-    }
-
-    public void setArtistTracks(Tracks results) {
-        ArrayList<PlaybackTrack> tracks = new ArrayList<PlaybackTrack>();
-
-        for (Track t : results.tracks) {
-            tracks.add(new PlaybackTrack(t));
-        }
-
-        setArtistTracks(tracks);
-    }
-
-    public void setArtistTracks(ArrayList<PlaybackTrack> tracks) {
-        TrackResultAdapter resultAdapter = new TrackResultAdapter(ctx, tracks);
-        trackResults.setAdapter(resultAdapter);
+        //setArtistTracks(tracks);
     }
 }

@@ -2,11 +2,17 @@ package com.tomsfreelance.spotifystreamer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +23,8 @@ import android.widget.Toast;
 
 import com.tomsfreelance.spotifystreamer.Adapters.ArtistResultAdapter;
 import com.tomsfreelance.spotifystreamer.Tasks.SearchArtistsTask;
+import com.tomsfreelance.spotifystreamer.model.PlaybackArtist;
+import com.tomsfreelance.spotifystreamer.model.PlaybackTrack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,62 +43,32 @@ import kaaes.spotify.webapi.android.models.ArtistsPager;
  *
  * Created by teynon on 5/30/2015.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+                        implements ArtistSearchFragment.OnSelectArtistListener,
+                                   ArtistHitsFragment.OnSelectTrackListener {
 
-    private EditText txtArtistSearch = null;
-    private Context ctx = this;
-    private Toast quickNotice = null;
-    private ListView artistResults = null;
-    private SearchArtistsTask searchTask = null;
-    private MainActivity self = this;
-
-    // Handlers for the typing delay.
-    protected Handler typingDelayHandler = new Handler();
-    protected Runnable typingDelayRunnable = new Runnable() {
-        @Override
-        public void run() {
-            // Time to search.
-            if (searchTask != null) searchTask.cancel(true);
-            searchTask = new SearchArtistsTask(self);
-            String searchText = txtArtistSearch.getText().toString();
-            if (!searchText.trim().equals(""))
-                searchTask.execute(searchText.trim());
-            else {
-                setArtistResults(new ArrayList<Artist>());
-            }
-        }
-    };
-
-    public void setArtistSearchResults(ArtistsPager results) {
-        setArtistSearchResults(results, false);
-    }
-
-    public void setArtistSearchResults(ArtistsPager results, boolean forceSet) {
-        if (forceSet || results.artists.total > 0) {
-            setArtistResults(results.artists.items);
-        }
-        else {
-            setArtistResults(new ArrayList<Artist>());
-
-            if (quickNotice != null) quickNotice.cancel();
-
-            quickNotice = Toast.makeText(ctx, R.string.msgNoResults, Toast.LENGTH_SHORT);
-            quickNotice.show();
-        }
-    }
-
-    private void setArtistResults(List<Artist> artists) {
-        ArtistResultAdapter resultAdapter = new ArtistResultAdapter(ctx, artists);
-        artistResults.setAdapter(resultAdapter);
-    }
+    private boolean TwoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        artistResults = (ListView)findViewById(R.id.listArtistResults);
-        InitializeListeners();
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        Log.i("Density", String.valueOf(metrics.densityDpi));
+
+        if (findViewById(R.id.fragment_results) != null) {
+                TwoPane = true;
+
+                if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_results, new ArtistHitsFragment())
+                        .commit();
+            }
+        }
+        else {
+            TwoPane = false;
+        }
     }
 
     @Override
@@ -115,44 +93,34 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void InitializeListeners() {
-        txtArtistSearch = (EditText)findViewById(R.id.txtSearchArtist);
+    @Override
+    public void onArtistSelected(Artist artist) {
+        ArtistHitsFragment hitsFragment = null;
+        if (TwoPane) {
+            hitsFragment = (ArtistHitsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_results);
+            hitsFragment.UpdateArtist(new PlaybackArtist(artist));
+        }
+        else {
+            hitsFragment = new ArtistHitsFragment();
+            Bundle args = new Bundle();
+            args.putParcelable(getString(R.string.intentMsgArtist), new PlaybackArtist(artist));
+            hitsFragment.setArguments(args);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_search, hitsFragment);
+            transaction.addToBackStack(null);
 
-        txtArtistSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            transaction.commit();
+        }
 
-            }
+        // Reference: http://stackoverflow.com/questions/14297178/setting-action-bar-title-and-subtitle
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setSubtitle(artist.name);
+        }
+    }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+    @Override
+    public void OnTrackSelected(PlaybackTrack track, ArrayList<PlaybackTrack> trackList) {
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Set a short typing delay to prevent spamming if the user is typing fast.
-
-                // Clear any existing delays
-                typingDelayHandler.removeCallbacks(typingDelayRunnable);
-
-
-                // Send a new delayed search request.
-                typingDelayHandler.postDelayed(typingDelayRunnable, getResources().getInteger(R.integer.searchTypingDelay));
-            }
-        });
-
-        artistResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ArtistResultAdapter adapter = (ArtistResultAdapter)artistResults.getAdapter();
-
-                // Load intent for selected artist.
-                Intent topSongsIntent = new Intent(ctx, ArtistHitsActivity.class);
-
-                topSongsIntent.putExtra(getString(R.string.intentMsgArtistName), adapter.getItem(position).name);
-                topSongsIntent.putExtra(getString(R.string.intentMsgArtistID), adapter.getItem(position).id);
-                startActivity(topSongsIntent);
-            }
-        });
     }
 }

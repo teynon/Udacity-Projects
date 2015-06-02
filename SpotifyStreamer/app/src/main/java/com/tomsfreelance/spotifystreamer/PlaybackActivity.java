@@ -1,6 +1,7 @@
 package com.tomsfreelance.spotifystreamer;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -35,6 +36,7 @@ public class PlaybackActivity extends AppCompatActivity {
     private TextView currentTime;
     private TextView remainingTime;
     private long trackTimeRemaining;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,7 @@ public class PlaybackActivity extends AppCompatActivity {
 
         UpdateSeekTimeRemaining();
 
-        // TODO - (Stage 2 I think?) Get the track details and start streaming.
+
     }
 
     private void UpdateSeekTimeRemaining() {

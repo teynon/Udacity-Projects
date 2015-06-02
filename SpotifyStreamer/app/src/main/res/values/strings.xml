@@ -6,6 +6,7 @@
     <string name="intentMsgArtistID">com.tomsfreelance.spotifystreamer.ArtistID</string>
     <string name="intentMsgTrack">com.tomsfreelance.spotifystreamer.Track</string>
     <string name="intentMsgTrackList">com.tomsfreelance.spotifystreamer.TrackList</string>
+    <string name="intentMsgArtist">com.tomsfreelance.spotifystreamer.Artist</string>
 
     <!-- Artist Search Screen -->
     <string name="searchPlaceholder">Search Artist</string>
@@ -28,4 +29,10 @@
     <string name="playbackAlbumPlaceholder">(Album Name)</string>
     <string name="playerSeekbarCurrentPlaceholder">0:00</string>
     <string name="playerSeekbarRemainingPlaceholder">0:30</string>
+
+    <!-- Playback Service -->
+    <string name="playbackServiceStarted">Spotify Streamer Playback service started.</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -2,6 +2,7 @@ package com.tomsfreelance.spotifystreamer.Tasks;
 
 import android.os.AsyncTask;
 
+import com.tomsfreelance.spotifystreamer.ArtistSearchFragment;
 import com.tomsfreelance.spotifystreamer.MainActivity;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -13,11 +14,11 @@ import kaaes.spotify.webapi.android.models.ArtistsPager;
  */
 public class SearchArtistsTask extends AsyncTask<String, Void, ArtistsPager> {
 
-    public MainActivity Parent = null;
+    public ArtistSearchFragment Parent = null;
     private SpotifyApi Spotify_API = null;
     private SpotifyService Spotify_Service = null;
 
-    public SearchArtistsTask(MainActivity parent) {
+    public SearchArtistsTask(ArtistSearchFragment parent) {
         Parent = parent;
     }
 

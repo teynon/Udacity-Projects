@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.tomsfreelance.spotifystreamer.ArtistHitsActivity;
+import com.tomsfreelance.spotifystreamer.ArtistHitsFragment;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,12 +24,12 @@ import kaaes.spotify.webapi.android.models.Tracks;
  */
 public class TopTracksForArtistTask extends AsyncTask<String, Void, Tracks> {
 
-    public ArtistHitsActivity Parent = null;
+    public ArtistHitsFragment Parent = null;
     private SpotifyApi Spotify_API = null;
     private SpotifyService Spotify_Service = null;
     public String CountryCode = "us";
 
-    public TopTracksForArtistTask(ArtistHitsActivity parent, String countryCode) {
+    public TopTracksForArtistTask(ArtistHitsFragment parent, String countryCode) {
         Parent = parent;
         CountryCode = countryCode;
     }
