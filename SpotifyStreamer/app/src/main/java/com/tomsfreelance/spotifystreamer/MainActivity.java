@@ -1,36 +1,21 @@
 package com.tomsfreelance.spotifystreamer;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.tomsfreelance.spotifystreamer.Adapters.ArtistResultAdapter;
-import com.tomsfreelance.spotifystreamer.Tasks.SearchArtistsTask;
-import com.tomsfreelance.spotifystreamer.model.PlaybackArtist;
-import com.tomsfreelance.spotifystreamer.model.PlaybackTrack;
+import com.tomsfreelance.spotifystreamer.Model.PlaybackArtist;
+import com.tomsfreelance.spotifystreamer.Model.PlaybackTrack;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import kaaes.spotify.webapi.android.models.Artist;
-import kaaes.spotify.webapi.android.models.ArtistsPager;
 
 
 /**

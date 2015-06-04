@@ -3,31 +3,22 @@ package com.tomsfreelance.spotifystreamer;
 import android.app.Dialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.INotificationSideChannel;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.tomsfreelance.spotifystreamer.Tasks.TopTracksForArtistTask;
-import com.tomsfreelance.spotifystreamer.model.PlaybackTrack;
+import com.tomsfreelance.spotifystreamer.Model.PlaybackTrack;
+import com.tomsfreelance.spotifystreamer.Service.PlaybackService;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 /**
@@ -62,6 +53,7 @@ public class PlaybackFragment extends DialogFragment {
         DialogView = inflater.inflate(R.layout.track_playback, container, false);
 
         Initialize();
+        StartPlayback();
 
         return DialogView;
     }
@@ -96,8 +88,13 @@ public class PlaybackFragment extends DialogFragment {
         Picasso.with(getActivity()).load(CurrentTrack.AlbumImage).into(imgAlbum);
 
         UpdateSeekTimeRemaining();
+    }
 
-
+    private void StartPlayback() {
+        Intent intent = new Intent(getActivity(), PlaybackService.class);
+        intent.putExtra(getString(R.string.intentMsgTrack), CurrentTrack);
+        intent.putExtra(getString(R.string.intentMsgTrackList), TrackList);
+        getActivity().startService(intent);
     }
 
     private void UpdateSeekTimeRemaining() {

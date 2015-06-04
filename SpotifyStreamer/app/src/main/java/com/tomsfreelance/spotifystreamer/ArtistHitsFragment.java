@@ -2,7 +2,6 @@ package com.tomsfreelance.spotifystreamer;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,8 +14,8 @@ import android.widget.ListView;
 
 import com.tomsfreelance.spotifystreamer.Adapters.TrackResultAdapter;
 import com.tomsfreelance.spotifystreamer.Tasks.TopTracksForArtistTask;
-import com.tomsfreelance.spotifystreamer.model.PlaybackArtist;
-import com.tomsfreelance.spotifystreamer.model.PlaybackTrack;
+import com.tomsfreelance.spotifystreamer.Model.PlaybackArtist;
+import com.tomsfreelance.spotifystreamer.Model.PlaybackTrack;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.tomsfreelance.spotifystreamer.model;
+package com.tomsfreelance.spotifystreamer.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

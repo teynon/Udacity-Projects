@@ -1,4 +1,4 @@
-package com.tomsfreelance.spotifystreamer.model;
+package com.tomsfreelance.spotifystreamer.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -20,6 +20,7 @@ public class PlaybackTrack implements Parcelable {
     public long TrackLength;
     public String AlbumImage;
     public String AlbumImageSmall;
+    public String StreamURL;
 
     public PlaybackTrack(Track fromTrack) {
         TrackID = fromTrack.id;
@@ -37,6 +38,7 @@ public class PlaybackTrack implements Parcelable {
             AlbumImage = fromTrack.album.images.get(0).url;
             AlbumImageSmall = fromTrack.album.images.get(fromTrack.album.images.size() - 1).url;
         }
+        StreamURL = fromTrack.preview_url.replace("https://", "http://");
     }
 
     public PlaybackTrack(Parcel in) {
@@ -69,6 +71,7 @@ public class PlaybackTrack implements Parcelable {
         dest.writeLong(TrackLength);
         dest.writeString(AlbumImage);
         dest.writeString(AlbumImageSmall);
+        dest.writeString(StreamURL);
     }
 
     private void ReadFromParcel(Parcel in) {
@@ -80,5 +83,6 @@ public class PlaybackTrack implements Parcelable {
         TrackLength = in.readLong();
         AlbumImage = in.readString();
         AlbumImageSmall = in.readString();
+        StreamURL = in.readString();
     }
 }

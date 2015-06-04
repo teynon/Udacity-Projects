@@ -21,16 +21,8 @@
             android:name=".ArtistHitsActivity"
             android:label="@string/title_activity_artist_hits" >
         </activity>
-        <activity
-            android:name=".PlaybackFragment"
-            android:label="@string/title_activity_playback" >
-        </activity>
+        <service android:name=".Service.PlaybackService" />
 
-        <service
-            android:name=".PlaybackService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
     </application>
 
 </manifest>

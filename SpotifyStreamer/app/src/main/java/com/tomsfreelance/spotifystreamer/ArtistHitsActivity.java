@@ -13,7 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.tomsfreelance.spotifystreamer.Adapters.TrackResultAdapter;
-import com.tomsfreelance.spotifystreamer.model.PlaybackTrack;
+import com.tomsfreelance.spotifystreamer.Model.PlaybackTrack;
 
 import java.util.ArrayList;
 

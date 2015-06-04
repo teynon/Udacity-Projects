@@ -10,13 +10,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.tomsfreelance.spotifystreamer.R;
-import com.tomsfreelance.spotifystreamer.model.PlaybackTrack;
+import com.tomsfreelance.spotifystreamer.Model.PlaybackTrack;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import kaaes.spotify.webapi.android.models.Artist;
-import kaaes.spotify.webapi.android.models.Track;
 
 /**
  * Created by gabriella on 5/30/2015.
