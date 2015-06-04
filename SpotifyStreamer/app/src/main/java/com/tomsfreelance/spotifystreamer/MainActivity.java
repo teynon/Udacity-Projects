@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
                         implements ArtistSearchFragment.OnSelectArtistListener,
                                    ArtistHitsFragment.OnSelectTrackListener {
 
-    private boolean TwoPane = false;
+    public static boolean TwoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -24,6 +24,7 @@
     <string name="topTracksCountryCode">us</string>
 
     <!-- Playback Screen -->
+    <string name="playbackTag">streamerPlaybackDialog</string>
     <string name="title_activity_playback">Spotify Streamer</string>
     <string name="playbackArtistPlaceholder">(Artist Name)</string>
     <string name="playbackAlbumPlaceholder">(Album Name)</string>
@@ -33,6 +34,4 @@
     <!-- Playback Service -->
     <string name="playbackServiceStarted">Spotify Streamer Playback service started.</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

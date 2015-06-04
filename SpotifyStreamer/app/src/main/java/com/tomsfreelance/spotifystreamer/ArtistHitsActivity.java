@@ -13,13 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.tomsfreelance.spotifystreamer.Adapters.TrackResultAdapter;
-import com.tomsfreelance.spotifystreamer.Tasks.TopTracksForArtistTask;
 import com.tomsfreelance.spotifystreamer.model.PlaybackTrack;
 
 import java.util.ArrayList;
-
-import kaaes.spotify.webapi.android.models.Track;
-import kaaes.spotify.webapi.android.models.Tracks;
 
 /**
  * NOTE: When I upgraded to Windows 8, it set my "local account" to "gabriella"
@@ -69,7 +65,7 @@ public class ArtistHitsActivity extends AppCompatActivity {
                 TrackResultAdapter adapter = (TrackResultAdapter) trackResults.getAdapter();
 
                 // Load intent for selected artist.
-                Intent playbackIntent = new Intent(ctx, PlaybackActivity.class);
+                Intent playbackIntent = new Intent(ctx, PlaybackFragment.class);
 
                 // Prep data to send to playback activity.
 

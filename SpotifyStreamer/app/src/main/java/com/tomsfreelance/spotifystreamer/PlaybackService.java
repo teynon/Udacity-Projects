@@ -1,6 +1,5 @@
 package com.tomsfreelance.spotifystreamer;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -9,7 +8,6 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 public class PlaybackService extends Service implements MediaPlayer.OnPreparedListener {
 
@@ -59,7 +57,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
         // The PendingIntent to launch our activity if the user selects this notification
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, PlaybackActivity.class), 0);
+                new Intent(this, PlaybackFragment.class), 0);
 
         // Set the info for the views that show in the notification panel.
         //notification.setLatestEventInfo(this, getText(R.string.local_service_label),

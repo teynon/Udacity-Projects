@@ -3,18 +3,15 @@ package com.tomsfreelance.spotifystreamer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.tomsfreelance.spotifystreamer.Adapters.TrackResultAdapter;
 import com.tomsfreelance.spotifystreamer.Tasks.TopTracksForArtistTask;
@@ -116,16 +113,25 @@ public class ArtistHitsFragment extends Fragment {
         trackResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                PlaybackFragment playbackFragment = new PlaybackFragment();
+
                 TrackResultAdapter adapter = (TrackResultAdapter) trackResults.getAdapter();
+                Bundle args = new Bundle();
+                args.putParcelable(getString(R.string.intentMsgTrack), adapter.getItem(position));
+                args.putParcelableArrayList(getString(R.string.intentMsgTrackList), adapter.GetTracks());
+                playbackFragment.setArguments(args);
 
-                // Load intent for selected artist.
-                Intent playbackIntent = new Intent(ctx, PlaybackActivity.class);
+                if (MainActivity.TwoPane) {
+                    playbackFragment.show(fragmentManager, getString(R.string.playbackTag));
+                }
+                else {
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-                // Prep data to send to playback activity.
+                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
-                playbackIntent.putExtra(getString(R.string.intentMsgTrack), adapter.getItem(position));
-                playbackIntent.putParcelableArrayListExtra(getString(R.string.intentMsgTrackList), adapter.GetTracks());
-                startActivity(playbackIntent);
+                    transaction.add(android.R.id.content, playbackFragment).addToBackStack(null).commit();
+                }
             }
         });
     }
@@ -167,7 +173,6 @@ public class ArtistHitsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnSelectTrackListener {
-        // TODO: Update argument type and name
         public void OnTrackSelected(PlaybackTrack track, ArrayList<PlaybackTrack> trackList);
     }
 
