@@ -3,4 +3,5 @@
     <integer name="searchTypingDelay">1000</integer>
     <integer name="playbackWidth">300</integer>
     <integer name="playbackHeight">300</integer>
+    <integer name="playbackLength">30000</integer>
 </resources>

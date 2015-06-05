@@ -117,7 +117,7 @@ public class ArtistHitsFragment extends Fragment {
 
                 TrackResultAdapter adapter = (TrackResultAdapter) trackResults.getAdapter();
                 Bundle args = new Bundle();
-                args.putParcelable(getString(R.string.intentMsgTrack), adapter.getItem(position));
+                args.putInt(getString(R.string.intentMsgTrack), position);
                 args.putParcelableArrayList(getString(R.string.intentMsgTrackList), adapter.GetTracks());
                 playbackFragment.setArguments(args);
 

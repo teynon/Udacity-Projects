@@ -7,6 +7,10 @@
     <string name="intentMsgTrack">com.tomsfreelance.spotifystreamer.Track</string>
     <string name="intentMsgTrackList">com.tomsfreelance.spotifystreamer.TrackList</string>
     <string name="intentMsgArtist">com.tomsfreelance.spotifystreamer.Artist</string>
+    <string name="intentMsgSeek">com.tomsfreelance.spotifystreamer.SeekUpdated</string>
+    <string name="intentMsgSeekProgress">com.tomsfreelance.spotifystreamer.SeekProgress</string>
+    <string name="intentMsgPlaybackAction">com.tomsfreelance.spotifystreamer.PlaybackAction</string>
+    <string name="intentMsgPlaybackCommand">com.tomsfreelance.spotifystreamer.PlaybackCommand</string>
 
     <!-- Artist Search Screen -->
     <string name="searchPlaceholder">Search Artist</string>
