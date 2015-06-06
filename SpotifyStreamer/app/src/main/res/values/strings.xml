@@ -11,6 +11,11 @@
     <string name="intentMsgSeekProgress">com.tomsfreelance.spotifystreamer.SeekProgress</string>
     <string name="intentMsgPlaybackAction">com.tomsfreelance.spotifystreamer.PlaybackAction</string>
     <string name="intentMsgPlaybackCommand">com.tomsfreelance.spotifystreamer.PlaybackCommand</string>
+    <string name="intentMsgNowPlaying">com.tomsfreelance.spotifystreamer.IsNowPlaying</string>
+    <string name="intentMsgArtistList">com.tomsfreelance.spotifystreamer.ArtistList</string>
+
+    <!-- ACTION BAR -->
+    <string name="action_nowplaying">Now Playing</string>
 
     <!-- Artist Search Screen -->
     <string name="searchPlaceholder">Search Artist</string>
@@ -34,6 +39,7 @@
     <string name="playbackAlbumPlaceholder">(Album Name)</string>
     <string name="playerSeekbarCurrentPlaceholder">0:00</string>
     <string name="playerSeekbarRemainingPlaceholder">0:30</string>
+    <string name="playbackBackstackName">com.tomsfreelance.spotifystreamer.playbackBackstack</string>
 
     <!-- Playback Service -->
     <string name="playbackServiceStarted">Spotify Streamer Playback service started.</string>

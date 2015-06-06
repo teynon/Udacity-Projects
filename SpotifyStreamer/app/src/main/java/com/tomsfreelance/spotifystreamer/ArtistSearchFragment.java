@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.tomsfreelance.spotifystreamer.Adapters.ArtistResultAdapter;
+import com.tomsfreelance.spotifystreamer.Model.PlaybackArtist;
+import com.tomsfreelance.spotifystreamer.Model.PlaybackTrack;
 import com.tomsfreelance.spotifystreamer.Tasks.SearchArtistsTask;
 
 import java.util.ArrayList;
@@ -81,6 +83,24 @@ public class ArtistSearchFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         InitializeListeners();
+
+        if (savedInstanceState != null) {
+            ArrayList<PlaybackArtist> artists = savedInstanceState.getParcelableArrayList(getString(R.string.intentMsgArtistList));
+            setArtistResults(artists);
+
+            typingDelayHandler.removeCallbacks(typingDelayRunnable);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (artistResults != null) {
+            ArtistResultAdapter adapter = (ArtistResultAdapter) artistResults.getAdapter();
+            if (adapter != null)
+                outState.putParcelableArrayList(getString(R.string.intentMsgArtistList), adapter.GetArtists());
+        }
     }
 
     @Override
@@ -103,21 +123,28 @@ public class ArtistSearchFragment extends Fragment {
             if (!searchText.trim().equals(""))
                 searchTask.execute(searchText.trim());
             else {
-                setArtistResults(new ArrayList<Artist>());
+                setArtistResults(new ArrayList<PlaybackArtist>());
             }
         }
     };
 
     public void setArtistSearchResults(ArtistsPager results) {
-        setArtistSearchResults(results, false);
+        ArrayList<PlaybackArtist> artists = new ArrayList<PlaybackArtist>();
+
+        for (Artist t : results.artists.items) {
+            artists.add(new PlaybackArtist(t));
+        }
+
+        setArtistSearchResults(artists, false);
     }
 
-    public void setArtistSearchResults(ArtistsPager results, boolean forceSet) {
-        if (forceSet || results.artists.total > 0) {
-            setArtistResults(results.artists.items);
+    public void setArtistSearchResults(ArrayList<PlaybackArtist> results, boolean forceSet) {
+
+        if (forceSet || results.size() > 0) {
+            setArtistResults(results);
         }
         else {
-            setArtistResults(new ArrayList<Artist>());
+            setArtistResults(new ArrayList<PlaybackArtist>());
 
             if (quickNotice != null) quickNotice.cancel();
 
@@ -126,7 +153,7 @@ public class ArtistSearchFragment extends Fragment {
         }
     }
 
-    private void setArtistResults(List<Artist> artists) {
+    private void setArtistResults(ArrayList<PlaybackArtist> artists) {
         ArtistResultAdapter resultAdapter = new ArtistResultAdapter(ctx, artists);
         artistResults.setAdapter(resultAdapter);
     }
@@ -163,7 +190,7 @@ public class ArtistSearchFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ArtistResultAdapter adapter = (ArtistResultAdapter) artistResults.getAdapter();
 
-                Artist artist = adapter.getItem(position);
+                PlaybackArtist artist = adapter.getItem(position);
 
                 mListener.onArtistSelected(artist);
             }
@@ -181,7 +208,7 @@ public class ArtistSearchFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnSelectArtistListener {
-        public void onArtistSelected(Artist artist);
+        public void onArtistSelected(PlaybackArtist artist);
     }
 
 }

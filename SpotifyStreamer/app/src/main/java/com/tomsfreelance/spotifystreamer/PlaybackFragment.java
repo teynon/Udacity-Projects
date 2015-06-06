@@ -2,21 +2,24 @@ package com.tomsfreelance.spotifystreamer;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.MediaPlayer;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -41,6 +44,9 @@ public class PlaybackFragment extends DialogFragment implements SeekBar.OnSeekBa
     private TextView txtArtist;
     private TextView txtAlbum;
     private TextView txtSong;
+    private ImageView btnPlay;
+    private ImageView btnNext;
+    private ImageView btnLast;
     private ImageView imgAlbum;
     private SeekBar seekBar;
     private TextView CurrentTime;
@@ -52,6 +58,9 @@ public class PlaybackFragment extends DialogFragment implements SeekBar.OnSeekBa
     private int SeekPosition;
     private boolean IsPlaying = false;
     private boolean IsInitialized = false;
+    private PlaybackService playbackService;
+    private MediaController playbackController;
+    private boolean AutoStart = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +69,13 @@ public class PlaybackFragment extends DialogFragment implements SeekBar.OnSeekBa
         // Get the track details.
         CurrentTrackIndex = getArguments().getInt(getString(R.string.intentMsgTrack));
         TrackList = getArguments().getParcelableArrayList(getString(R.string.intentMsgTrackList));
-        CurrentTrack = TrackList.get(CurrentTrackIndex);
+        PlaybackBroadcastAction action = (PlaybackBroadcastAction)getArguments().getSerializable(getString(R.string.intentMsgPlaybackAction));
+        if (action == PlaybackBroadcastAction.PLAYBACK_UPDATE) {
+            AutoStart = false;
+        }
+
+        if (CurrentTrackIndex > 0)
+            CurrentTrack = TrackList.get(CurrentTrackIndex);
         SeekPosition = getArguments().getInt(getString(R.string.intentMsgSeekProgress));
 
         TrackLength = getResources().getInteger(R.integer.playbackLength);
@@ -76,7 +91,7 @@ public class PlaybackFragment extends DialogFragment implements SeekBar.OnSeekBa
 
         if (!IsInitialized) {
             Initialize();
-            StartPlayback();
+            if (AutoStart) StartPlayback();
             IsInitialized = true;
         }
         InitializeListeners();
@@ -106,6 +121,9 @@ public class PlaybackFragment extends DialogFragment implements SeekBar.OnSeekBa
         txtArtist = (TextView)DialogView.findViewById(R.id.txtPlaybackArtistName);
         txtAlbum = (TextView)DialogView.findViewById(R.id.txtPlaybackAlbumName);
         txtSong = (TextView)DialogView.findViewById(R.id.playbackSongName);
+        btnPlay = (ImageView)DialogView.findViewById(R.id.btnPlay);
+        btnLast = (ImageView)DialogView.findViewById(R.id.btnPrev);
+        btnNext = (ImageView)DialogView.findViewById(R.id.btnNext);
         imgAlbum = (ImageView)DialogView.findViewById(R.id.imgPlaybackAlbum);
         seekBar = (SeekBar)DialogView.findViewById(R.id.playbackSeekbar);
         CurrentTime = (TextView)DialogView.findViewById(R.id.txtSeekbarCurrent);
@@ -113,12 +131,16 @@ public class PlaybackFragment extends DialogFragment implements SeekBar.OnSeekBa
     }
 
     private void updateView() {
-        txtArtist.setText(CurrentTrack.Artist);
-        txtAlbum.setText(CurrentTrack.AlbumName);
-        txtSong.setText(CurrentTrack.SongName);
+        if (CurrentTrack != null) {
+            txtArtist.setText(CurrentTrack.Artist);
+            txtAlbum.setText(CurrentTrack.AlbumName);
+            txtSong.setText(CurrentTrack.SongName);
 
-        TrackTimeRemaining = TrackLength; // Each track is 30 seconds. //CurrentTrack.TrackLength;
-        Picasso.with(getActivity()).load(CurrentTrack.AlbumImage).into(imgAlbum);
+            TrackTimeRemaining = TrackLength; // Each track is 30 seconds. //CurrentTrack.TrackLength;
+            imgAlbum.setMinimumHeight(imgAlbum.getHeight());
+            imgAlbum.setMinimumWidth(imgAlbum.getWidth());
+            Picasso.with(getActivity()).load(CurrentTrack.AlbumImage).into(imgAlbum);
+        }
     }
 
     private void sendMessage(PlaybackBroadcastAction action) {
@@ -132,6 +154,43 @@ public class PlaybackFragment extends DialogFragment implements SeekBar.OnSeekBa
 
     private void InitializeListeners() {
         seekBar.setOnSeekBarChangeListener(this);
+
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (IsPlaying) {
+                    sendMessage(PlaybackBroadcastAction.PLAYBACK_PAUSE);
+                    setPaused();
+                }
+                else {
+                    sendMessage(PlaybackBroadcastAction.PLAYBACK_RESUME);
+                    setPlaying();
+                }
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CurrentTrackIndex < TrackList.size() - 1)
+                {
+                    CurrentTrackIndex++;
+                    stopProgressBarSimulator();
+                    sendMessage(PlaybackBroadcastAction.PLAYBACK_START);
+                }
+            }
+        });
+
+        btnLast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CurrentTrackIndex > 0) {
+                    stopProgressBarSimulator();
+                    CurrentTrackIndex--;
+                    sendMessage(PlaybackBroadcastAction.PLAYBACK_START);
+                }
+            }
+        });
     }
 
     private void StartPlayback() {
@@ -179,6 +238,68 @@ public class PlaybackFragment extends DialogFragment implements SeekBar.OnSeekBa
         startProgressBarSimulator();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Intent intent = new Intent(getActivity(), PlaybackService.class);
+        getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (playbackService != null) {
+            getActivity().unbindService(serviceConnection);
+            playbackService = null;
+        }
+    }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            PlaybackService.LocalBinder binder = (PlaybackService.LocalBinder)service;
+            playbackService = binder.getService();
+
+            connectMediaHandler.obtainMessage(1).sendToTarget();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            playbackService = null;
+        }
+    };
+
+    private Handler connectMediaHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            TrackList = playbackService.TrackList;
+            CurrentTrackIndex = playbackService.CurrentTrackIndex;
+            if (TrackList != null && CurrentTrackIndex >= 0 && CurrentTrackIndex < TrackList.size())
+                CurrentTrack = TrackList.get(CurrentTrackIndex);
+
+            SeekPosition = playbackService.getCurrentPosition();
+            UpdateSeekPosition(SeekPosition);
+
+            if (playbackService.isPlaying()) {
+                stopProgressBarSimulator();
+                startProgressBarSimulator();
+                setPlaying();
+            }
+            else {
+                setPaused();
+            }
+
+            updateView();
+            /*playbackController = new MediaController(getActivity());
+            playbackController.setAnchorView(getView().findViewById(R.id.playbackMediaController));
+            playbackController.setMediaPlayer(playbackService);
+            playbackController.setEnabled(true);
+            playbackController.show();
+            playbackController.requestFocus();
+            playbackController.setAnchorView(getView());*/
+        }
+    };
+
     private class ProgressSimulator extends TimerTask {
         @Override
         public void run() {
@@ -207,36 +328,50 @@ public class PlaybackFragment extends DialogFragment implements SeekBar.OnSeekBa
         RemainingTime.setText(Integer.toString(minutes) + ":" + String.format("%02d", seconds));
     }
 
+    private void setPlaying() {
+        // getDrawable(id, theme) requires higher min sdk
+        btnPlay.setImageDrawable(getResources().getDrawable(R.mipmap.btnpause));
+    }
+
+    private void setPaused() {
+        btnPlay.setImageDrawable(getResources().getDrawable(R.mipmap.btnplay));
+    }
+
     private void subscribePlayback() {
         playbackMonitor = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                SeekPosition = intent.getIntExtra(getString(R.string.intentMsgSeekProgress), 0);
-                CurrentTrackIndex = intent.getIntExtra(getString(R.string.intentMsgTrack), 0);
-                CurrentTrack = (CurrentTrackIndex >= 0 && TrackList.size() > CurrentTrackIndex) ? TrackList.get(CurrentTrackIndex) : TrackList.get(0);
-                PlaybackBroadcastAction action = (PlaybackBroadcastAction)intent.getSerializableExtra(getString(R.string.intentMsgPlaybackAction));
+                if (getActivity() != null) {
+                    SeekPosition = intent.getIntExtra(getString(R.string.intentMsgSeekProgress), 0);
+                    CurrentTrackIndex = intent.getIntExtra(getString(R.string.intentMsgTrack), 0);
+                    CurrentTrack = (CurrentTrackIndex >= 0 && TrackList.size() > CurrentTrackIndex) ? TrackList.get(CurrentTrackIndex) : TrackList.get(0);
+                    PlaybackBroadcastAction action = (PlaybackBroadcastAction) intent.getSerializableExtra(getString(R.string.intentMsgPlaybackAction));
 
-                UpdateSeekPosition(SeekPosition);
+                    UpdateSeekPosition(SeekPosition);
 
-                switch (action) {
-                    case PLAYBACK_STARTED:
-                        stopProgressBarSimulator();
-                        startProgressBarSimulator();
-                        updateView();
-                        break;
-                    case PLAYBACK_STOPPED:
-                        stopProgressBarSimulator();
-                        updateView();
-                        break;
-                    case PLAYBACK_UPDATE:
-                        if (!IsPlaying) {
-                            IsPlaying = true;
+                    switch (action) {
+                        case PLAYBACK_STARTED:
                             stopProgressBarSimulator();
                             startProgressBarSimulator();
+                            setPlaying();
                             updateView();
-                        }
-                    default:
-                        break;
+                            break;
+                        case PLAYBACK_STOPPED:
+                            IsPlaying = false;
+                            stopProgressBarSimulator();
+                            setPaused();
+                            updateView();
+                            break;
+                        case PLAYBACK_UPDATE:
+                            if (!IsPlaying) {
+                                IsPlaying = true;
+                                stopProgressBarSimulator();
+                                startProgressBarSimulator();
+                                updateView();
+                            }
+                        default:
+                            break;
+                    }
                 }
             }
         };

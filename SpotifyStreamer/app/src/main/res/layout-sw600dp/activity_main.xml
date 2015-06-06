@@ -4,7 +4,10 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tomsfreelance.spotifystreamer.MainActivity">
+    tools:context="com.tomsfreelance.spotifystreamer.MainActivity"
+    android:divider="@drawable/maindivider"
+    android:dividerPadding="4dp"
+    android:showDividers="middle">
 
     <fragment
         android:id="@+id/fragment_search"
@@ -12,8 +15,9 @@
         android:layout_weight="6"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/artist_search" />
+        tools:layout="@layout/artist_search"
 
+        />
     <FrameLayout
         android:id="@+id/fragment_results"
         android:layout_weight="4"

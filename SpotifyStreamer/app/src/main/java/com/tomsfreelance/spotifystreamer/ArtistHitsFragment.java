@@ -112,25 +112,9 @@ public class ArtistHitsFragment extends Fragment {
         trackResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                PlaybackFragment playbackFragment = new PlaybackFragment();
-
                 TrackResultAdapter adapter = (TrackResultAdapter) trackResults.getAdapter();
-                Bundle args = new Bundle();
-                args.putInt(getString(R.string.intentMsgTrack), position);
-                args.putParcelableArrayList(getString(R.string.intentMsgTrackList), adapter.GetTracks());
-                playbackFragment.setArguments(args);
 
-                if (MainActivity.TwoPane) {
-                    playbackFragment.show(fragmentManager, getString(R.string.playbackTag));
-                }
-                else {
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
-                    transaction.add(android.R.id.content, playbackFragment).addToBackStack(null).commit();
-                }
+                mListener.OnTrackSelected(position, adapter.GetTracks());
             }
         });
     }
@@ -172,7 +156,7 @@ public class ArtistHitsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnSelectTrackListener {
-        public void OnTrackSelected(PlaybackTrack track, ArrayList<PlaybackTrack> trackList);
+        public void OnTrackSelected(int track, ArrayList<PlaybackTrack> trackList);
     }
 
 }

@@ -11,6 +11,7 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.MediaController;
 
 import com.tomsfreelance.spotifystreamer.Enums.PlaybackBroadcastAction;
 import com.tomsfreelance.spotifystreamer.R;
@@ -26,15 +27,15 @@ import java.util.TimerTask;
 public class PlaybackService extends Service implements
         MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener, MediaPlayer.OnSeekCompleteListener,
-        MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener {
+        MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener, MediaController.MediaPlayerControl {
 
-    private MediaPlayer player;
+    public MediaPlayer player;
     private LocalBroadcastManager broadcaster;
     private Timer seekTimer = new Timer();
 
-    private int CurrentTrackIndex;
     private PlaybackTrack CurrentTrack;
-    private ArrayList<PlaybackTrack> TrackList;
+    public int CurrentTrackIndex;
+    public ArrayList<PlaybackTrack> TrackList;
     private boolean Completed = false;
 
     public PlaybackService() {
@@ -56,7 +57,11 @@ public class PlaybackService extends Service implements
                     startTrack();
                     break;
                 case PLAYBACK_PAUSE:
-                    stopPlaying();
+                    pausePlaying();
+                    break;
+                case PLAYBACK_RESUME:
+                    player.start();
+                    UpdateSeekPosition(SeekPosition);
                     break;
                 case PLAYBACK_STARTED:
                     startPlaying();
@@ -179,6 +184,15 @@ public class PlaybackService extends Service implements
         SendBroadcast(PlaybackBroadcastAction.PLAYBACK_STARTED, position);
     }
 
+    private void pausePlaying() {
+        if (player.isPlaying()) {
+            player.pause();
+        }
+
+        stopSeekMonitor();
+        SendBroadcast(PlaybackBroadcastAction.PLAYBACK_STOPPED);
+    }
+
     private void stopPlaying() {
         if (player.isPlaying()) {
             player.stop();
@@ -219,6 +233,61 @@ public class PlaybackService extends Service implements
         seekTimer = new Timer();
     }
 
+    @Override
+    public void start() {
+        player.start();
+    }
+
+    @Override
+    public void pause() {
+        player.pause();
+    }
+
+    @Override
+    public int getDuration() {
+        return player.getDuration();
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        return player.getCurrentPosition();
+    }
+
+    @Override
+    public void seekTo(int pos) {
+        player.seekTo(pos);
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return player.isPlaying();
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        return 0;
+    }
+
+    @Override
+    public boolean canPause() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekBackward() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekForward() {
+        return true;
+    }
+
+    @Override
+    public int getAudioSessionId() {
+        return player.getAudioSessionId();
+    }
+
     private class SeekMonitor extends TimerTask {
         public void run() {
             if (player.isPlaying())
@@ -229,7 +298,7 @@ public class PlaybackService extends Service implements
 
     private final IBinder playbackBinder = new LocalBinder();
     public class LocalBinder extends Binder {
-        PlaybackService getService() {
+        public PlaybackService getService() {
             return PlaybackService.this;
         }
     }

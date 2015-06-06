@@ -11,15 +11,20 @@ import kaaes.spotify.webapi.android.models.Artist;
 public class PlaybackArtist implements Parcelable {
     public String ArtistID;
     public String ArtistName;
+    public String ArtistImage;
 
     public PlaybackArtist(Artist artist) {
         ArtistID = artist.id;
         ArtistName = artist.name;
+        if (artist.images.size() > 0) {
+            ArtistImage = artist.images.get(artist.images.size() - 1).url;
+        }
     }
 
-    public PlaybackArtist(String artistID, String artistName) {
+    public PlaybackArtist(String artistID, String artistName, String artistImage) {
         ArtistID = artistID;
         ArtistName = artistName;
+        ArtistImage = artistImage;
     }
 
     public PlaybackArtist(Parcel in) {
@@ -45,10 +50,12 @@ public class PlaybackArtist implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(ArtistID);
         dest.writeString(ArtistName);
+        dest.writeString(ArtistImage);
     }
 
     private void ReadFromParcel(Parcel in) {
         ArtistID = in.readString();
         ArtistName = in.readString();
+        ArtistImage = in.readString();
     }
 }

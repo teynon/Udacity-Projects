@@ -9,8 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.tomsfreelance.spotifystreamer.Model.PlaybackArtist;
 import com.tomsfreelance.spotifystreamer.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kaaes.spotify.webapi.android.models.Artist;
@@ -19,14 +21,18 @@ import kaaes.spotify.webapi.android.models.Image;
 /**
  * Created by gabriella on 5/30/2015.
  */
-public class ArtistResultAdapter extends ArrayAdapter<Artist> {
+public class ArtistResultAdapter extends ArrayAdapter<PlaybackArtist> {
     private Context ctx = null;
-    private List<Artist> Artists = null;
+    private ArrayList<PlaybackArtist> Artists = null;
 
-    public ArtistResultAdapter(Context context, List<Artist> artists) {
+    public ArtistResultAdapter(Context context, ArrayList<PlaybackArtist> artists) {
         super(context, R.layout.artist_result, artists);
         ctx = context;
         Artists = artists;
+    }
+
+    public ArrayList<PlaybackArtist> GetArtists() {
+        return Artists;
     }
 
     // Used http://stackoverflow.com/questions/11927967/dynamically-populate-the-linear-layout-depending-upon-markers-on-the-map
@@ -50,11 +56,10 @@ public class ArtistResultAdapter extends ArrayAdapter<Artist> {
         }
 
         if (holder != null) {
-            Artist artist = Artists.get(position);
-            holder.txtArtistName.setText(artist.name);
-            if (artist.images.size() > 0) {
-                // Get the smallest one.
-                Picasso.with(ctx).load(artist.images.get(artist.images.size() - 1).url).into(holder.imgArtist);
+            PlaybackArtist artist = Artists.get(position);
+            holder.txtArtistName.setText(artist.ArtistName);
+            if (artist.ArtistImage != null) {
+                Picasso.with(ctx).load(artist.ArtistImage).into(holder.imgArtist);
             }
         }
 
