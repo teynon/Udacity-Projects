@@ -4,4 +4,5 @@
     <integer name="playbackWidth">300</integer>
     <integer name="playbackHeight">300</integer>
     <integer name="playbackLength">30000</integer>
+    <integer name="notificationStreamID">1337</integer>
 </resources>

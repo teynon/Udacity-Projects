@@ -10,6 +10,7 @@ public enum PlaybackBroadcastAction {
     PLAYBACK_UPDATE,
     PLAYBACK_PAUSE,
     PLAYBACK_RESUME,
+    PLAYBACK_NONE,
     PLAYBACK_NEXT,
     PLAYBACK_PREVIOUS
 }

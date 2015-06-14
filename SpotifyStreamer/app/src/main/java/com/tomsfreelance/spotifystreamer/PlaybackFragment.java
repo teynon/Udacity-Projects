@@ -28,6 +28,7 @@ import com.tomsfreelance.spotifystreamer.Enums.PlaybackBroadcastAction;
 import com.tomsfreelance.spotifystreamer.Model.PlaybackTrack;
 import com.tomsfreelance.spotifystreamer.Service.PlaybackService;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -74,8 +75,9 @@ public class PlaybackFragment extends DialogFragment implements SeekBar.OnSeekBa
             AutoStart = false;
         }
 
-        if (CurrentTrackIndex > 0)
+        if (CurrentTrackIndex >= 0)
             CurrentTrack = TrackList.get(CurrentTrackIndex);
+
         SeekPosition = getArguments().getInt(getString(R.string.intentMsgSeekProgress));
 
         TrackLength = getResources().getInteger(R.integer.playbackLength);
@@ -270,35 +272,47 @@ public class PlaybackFragment extends DialogFragment implements SeekBar.OnSeekBa
         }
     };
 
-    private Handler connectMediaHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            TrackList = playbackService.TrackList;
-            CurrentTrackIndex = playbackService.CurrentTrackIndex;
-            if (TrackList != null && CurrentTrackIndex >= 0 && CurrentTrackIndex < TrackList.size())
-                CurrentTrack = TrackList.get(CurrentTrackIndex);
+    private static class PlaybackMediaHandler extends Handler {
+        private final WeakReference<PlaybackFragment> Activity;
 
-            SeekPosition = playbackService.getCurrentPosition();
-            UpdateSeekPosition(SeekPosition);
-
-            if (playbackService.isPlaying()) {
-                stopProgressBarSimulator();
-                startProgressBarSimulator();
-                setPlaying();
-            }
-            else {
-                setPaused();
-            }
-
-            updateView();
-            /*playbackController = new MediaController(getActivity());
-            playbackController.setAnchorView(getView().findViewById(R.id.playbackMediaController));
-            playbackController.setMediaPlayer(playbackService);
-            playbackController.setEnabled(true);
-            playbackController.show();
-            playbackController.requestFocus();
-            playbackController.setAnchorView(getView());*/
+        public PlaybackMediaHandler(PlaybackFragment activity) {
+            Activity = new WeakReference<PlaybackFragment>(activity);
         }
-    };
+
+        public void handleMessage(Message msg) {
+            PlaybackFragment activity = Activity.get();
+            if (activity.isAdded()) {
+                activity.TrackList = activity.playbackService.TrackList;
+                activity.CurrentTrackIndex = activity.playbackService.CurrentTrackIndex;
+                if (activity.TrackList != null && activity.CurrentTrackIndex >= 0 && activity.CurrentTrackIndex < activity.TrackList.size())
+                    activity.CurrentTrack = activity.TrackList.get(activity.CurrentTrackIndex);
+
+                activity.SeekPosition = activity.playbackService.getCurrentPosition();
+                activity.UpdateSeekPosition(activity.SeekPosition);
+
+                if (activity.playbackService.isPlaying()) {
+                    activity.stopProgressBarSimulator();
+                    activity.startProgressBarSimulator();
+                    activity.setPlaying();
+                } else {
+                    activity.setPaused();
+                }
+
+                activity.updateView();
+                /*playbackController = new MediaController(getActivity());
+                playbackController.setAnchorView(getView().findViewById(R.id.playbackMediaController));
+                playbackController.setMediaPlayer(playbackService);
+                playbackController.setEnabled(true);
+                playbackController.show();
+                playbackController.requestFocus();
+                playbackController.setAnchorView(getView());*/
+            }
+        }
+
+
+    }
+
+    private final PlaybackMediaHandler connectMediaHandler = new PlaybackMediaHandler(this);
 
     private class ProgressSimulator extends TimerTask {
         @Override

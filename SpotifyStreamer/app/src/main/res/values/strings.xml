@@ -13,6 +13,14 @@
     <string name="intentMsgPlaybackCommand">com.tomsfreelance.spotifystreamer.PlaybackCommand</string>
     <string name="intentMsgNowPlaying">com.tomsfreelance.spotifystreamer.IsNowPlaying</string>
     <string name="intentMsgArtistList">com.tomsfreelance.spotifystreamer.ArtistList</string>
+    <string name="intentMsgPlaybackPrev">com.tomsfreelance.spotifystreamer.PlaybackPrevious</string>
+    <string name="intentMsgPlaybackNext">com.tomsfreelance.spotifystreamer.PlaybackNext</string>
+    <string name="intentMsgPlaybackPlay">com.tomsfreelance.spotifystreamer.PlaybackPlayPause</string>
+
+    <string name="actionNext">Next</string>
+    <string name="actionPrev">Prev</string>
+    <string name="actionPlay">Play</string>
+    <string name="actionPause">Pause</string>
 
     <!-- ACTION BAR -->
     <string name="action_nowplaying">Now Playing</string>

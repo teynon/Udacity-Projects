@@ -1,6 +1,7 @@
 package com.tomsfreelance.spotifystreamer;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity
     public static boolean TwoPane = false;
     private Menu ActionMenu;
     private boolean ShowNowPlaying = false;
+    private PlaybackFragment playbackFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +50,36 @@ public class MainActivity extends AppCompatActivity
         Log.i("Density", String.valueOf(metrics.densityDpi));
 
         if (findViewById(R.id.fragment_results) != null) {
-                TwoPane = true;
+            TwoPane = true;
 
-                if (savedInstanceState == null) {
+
+            if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_results, new ArtistHitsFragment())
-                        .commit();
+                    .replace(R.id.fragment_results, new ArtistHitsFragment())
+                    .commit();
             }
+
         }
         else {
             TwoPane = false;
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (intent.hasExtra(getString(R.string.intentMsgPlaybackAction))) {
+            PlaybackBroadcastAction action = (PlaybackBroadcastAction)intent.getSerializableExtra(getString(R.string.intentMsgPlaybackAction));
+
+            if (action == PlaybackBroadcastAction.PLAYBACK_UPDATE)
+                OpenPlayer(-1, null, PlaybackBroadcastAction.PLAYBACK_UPDATE);
+        }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
     }
 
     @Override
@@ -133,11 +154,17 @@ public class MainActivity extends AppCompatActivity
 
     public void OpenPlayer(int track, ArrayList<PlaybackTrack> trackList, PlaybackBroadcastAction action) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        PlaybackFragment playbackFragment = new PlaybackFragment();
         Bundle args = new Bundle();
         args.putSerializable(getString(R.string.intentMsgPlaybackAction), action);
         args.putInt(getString(R.string.intentMsgTrack), track);
         args.putParcelableArrayList(getString(R.string.intentMsgTrackList), trackList);
+
+        if (playbackFragment != null) {
+            playbackFragment.dismiss();
+            playbackFragment = null;
+        }
+
+        playbackFragment = new PlaybackFragment();
         playbackFragment.setArguments(args);
 
         if (MainActivity.TwoPane) {
@@ -160,7 +187,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void ShowNowPlayingAction() {
-        ActionMenu.findItem(R.id.action_resumePlayback).setVisible(true);
+        if (ActionMenu != null) {
+            MenuItem resume = ActionMenu.findItem(R.id.action_resumePlayback);
+            if (resume != null) resume.setVisible(true);
+        }
         ShowNowPlaying = true;
     }
 

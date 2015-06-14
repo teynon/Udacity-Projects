@@ -1,19 +1,31 @@
 package com.tomsfreelance.spotifystreamer.Service;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.MediaController;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tomsfreelance.spotifystreamer.Enums.PlaybackBroadcastAction;
+import com.tomsfreelance.spotifystreamer.MainActivity;
 import com.tomsfreelance.spotifystreamer.R;
 import com.tomsfreelance.spotifystreamer.Model.PlaybackTrack;
 
@@ -37,6 +49,7 @@ public class PlaybackService extends Service implements
     public int CurrentTrackIndex;
     public ArrayList<PlaybackTrack> TrackList;
     private boolean Completed = false;
+    public BroadcastReceiver notificationReceiver;
 
     public PlaybackService() {
         super();
@@ -90,6 +103,79 @@ public class PlaybackService extends Service implements
                 e.printStackTrace();
             }
         }
+
+        UpdateNotification();
+    }
+
+    private void UpdateNotification() {
+        Picasso.with(this).load(CurrentTrack.AlbumImageSmall).into(new Target() {
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                Context ctx = getApplicationContext();
+
+                Intent prevIntent = new Intent(getString(R.string.actionPrev));
+                prevIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                prevIntent.putExtra(getString(R.string.intentMsgPlaybackPrev), true);
+
+                Intent nextIntent = new Intent(getString(R.string.actionNext));
+                nextIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                nextIntent.putExtra(getString(R.string.intentMsgPlaybackNext), true);
+
+                Intent playIntent = new Intent(getString((player.isPlaying()) ? R.string.actionPause : R.string.actionPlay));
+                playIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                playIntent.putExtra(getString(R.string.intentMsgPlaybackPlay), true);
+
+                Intent playerIntent = new Intent(getApplicationContext(), MainActivity.class);
+                playerIntent.setAction(Intent.ACTION_MAIN);
+                playerIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                playerIntent.putExtra(getString(R.string.intentMsgPlaybackAction), PlaybackBroadcastAction.PLAYBACK_UPDATE);
+                playerIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                //playerIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+                stackBuilder.addParentStack(MainActivity.class);
+                stackBuilder.addNextIntent(playerIntent);
+                stackBuilder.addNextIntent(prevIntent);
+                stackBuilder.addNextIntent(nextIntent);
+                stackBuilder.addNextIntent(playIntent);
+
+                PendingIntent nextPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, nextIntent, 0);
+                PendingIntent prevPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, prevIntent, 0);
+                PendingIntent playPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, playIntent, 0);
+
+                PendingIntent resultPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, playerIntent, 0);
+
+                //PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                int playPauseDrawable = (player.isPlaying()) ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_circle_outline_white_24dp;
+                String actionPlayPause = (player.isPlaying()) ? getString(R.string.actionPause) : getString(R.string.actionPlay);
+
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext())
+                        .setLargeIcon(bitmap)
+                        .setSmallIcon(R.drawable.ic_headset_white_24dp)
+                        .addAction(R.drawable.ic_skip_previous_white_24dp, getString(R.string.actionPrev), prevPendingIntent)
+                        .addAction(playPauseDrawable, actionPlayPause, playPendingIntent)
+                        .addAction(R.drawable.ic_skip_next_white_24dp, getString(R.string.actionNext), nextPendingIntent)
+                        .setContentTitle(CurrentTrack.SongName)
+                        .setContentText(CurrentTrack.Artist)
+                        .setVisibility(Notification.VISIBILITY_PUBLIC);
+
+                notificationBuilder.setContentIntent(resultPendingIntent);
+                NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
+                notificationManager.notify(getResources().getInteger(R.integer.notificationStreamID), notificationBuilder.build());
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        });
     }
 
     /*@Override
@@ -110,7 +196,41 @@ public class PlaybackService extends Service implements
         player.setOnInfoListener(this);
         player.reset();
 
+        RegisterNotificationReceiver();
+
         broadcaster = LocalBroadcastManager.getInstance(this);
+    }
+
+    private void RegisterNotificationReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(getString(R.string.actionNext));
+        filter.addAction(getString(R.string.actionPrev));
+        filter.addAction(getString(R.string.actionPlay));
+        filter.addAction(getString(R.string.actionPause));
+
+        notificationReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+
+                if (action == getString(R.string.actionNext)) {
+                    nextTrack();
+                }
+                else if (action == getString(R.string.actionPrev)) {
+                    prevTrack();
+                }
+                else if (action == getString(R.string.actionPlay)) {
+                    startPlaying();
+                }
+                else if (action == getString(R.string.actionPause)) {
+                    pausePlaying();
+                }
+
+                UpdateNotification();
+            }
+        };
+
+        registerReceiver(notificationReceiver, filter);
     }
 
     private void UpdateSeekPosition(int position) {
@@ -128,6 +248,14 @@ public class PlaybackService extends Service implements
 
             player.release();
         }
+
+        unregisterReceiver(notificationReceiver);
+        dismissNotification();
+    }
+
+    private void dismissNotification() {
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(getResources().getInteger(R.integer.notificationStreamID));
     }
 
     @Override
@@ -145,8 +273,19 @@ public class PlaybackService extends Service implements
         Completed = true;
         stopPlaying();
 
+        nextTrack();
+    }
+
+    private void nextTrack() {
         if (CurrentTrackIndex + 1 < TrackList.size()) {
             CurrentTrack = TrackList.get(++CurrentTrackIndex);
+            startTrack();
+        }
+    }
+
+    private void prevTrack() {
+        if (CurrentTrackIndex - 1 >= 0) {
+            CurrentTrack = TrackList.get(--CurrentTrackIndex);
             startTrack();
         }
     }
@@ -221,7 +360,15 @@ public class PlaybackService extends Service implements
 
         broadcaster.sendBroadcast(seekUpdateIntent);
         Completed = false;
+
+        handleNotification.obtainMessage(1).sendToTarget();
     }
+
+    private Handler handleNotification = new Handler() {
+        public void handleMessage(Message msg) {
+            UpdateNotification();
+        }
+    };
 
     private void startSeekMonitor() {
         // We can update the seek less often and fake the funk in the UI application.
